@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SampleInternetShop.Models;
+using RockyInternetShop.Models;
 
-namespace SampleInternetShop.Data
+namespace RockyInternetShop.Data
 {
     public class AppDbContext : DbContext
     {

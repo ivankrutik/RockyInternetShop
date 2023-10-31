@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SampleInternetShop.Data;
+using RockyInternetShop.Data;
 
 #nullable disable
 
-namespace SampleInternetShop.Migrations
+namespace RockyInternetShop.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20231027142655_AddCategoryToDb")]
@@ -24,7 +24,7 @@ namespace SampleInternetShop.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SampleInternetShop.Models.Category", b =>
+            modelBuilder.Entity("RockyInternetShop.Models.Category", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

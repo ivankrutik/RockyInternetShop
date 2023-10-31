@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SampleInternetShop.Data;
+using RockyInternetShop.Data;
 
 #nullable disable
 
-namespace SampleInternetShop.Migrations
+namespace RockyInternetShop.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -21,7 +21,7 @@ namespace SampleInternetShop.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SampleInternetShop.Models.Category", b =>
+            modelBuilder.Entity("RockyInternetShop.Models.Category", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

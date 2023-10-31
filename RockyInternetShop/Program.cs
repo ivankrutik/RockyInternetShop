@@ -1,4 +1,4 @@
-using SampleInternetShop.Data;
+using RockyInternetShop.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

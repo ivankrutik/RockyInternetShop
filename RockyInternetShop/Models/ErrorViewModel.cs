@@ -1,4 +1,4 @@
-namespace SampleInternetShop.Models
+namespace RockyInternetShop.Models
 {
     public class ErrorViewModel
     {

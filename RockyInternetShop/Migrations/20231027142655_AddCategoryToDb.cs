@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace SampleInternetShop.Migrations
+namespace RockyInternetShop.Migrations
 {
     /// <inheritdoc />
     public partial class AddCategoryToDb : Migration

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SampleInternetShop.Models;
+using RockyInternetShop.Models;
 using System.Diagnostics;
 
-namespace SampleInternetShop.Controllers
+namespace RockyInternetShop.Controllers
 {
     public class HomeController : Controller
     {
