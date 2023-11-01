@@ -7,8 +7,8 @@
         </div>
         <div class="text-right col-6">
             <a asp-controller="Category" asp-action="Create" class="btn btn-primary">
-                Create new category
-            </a>           
+                <i class="fa fa-plus"></i> &nbsp; Create new category
+            </a>
         </div>
     </div>
 
@@ -26,7 +26,7 @@
                         Display Order
                     </th>
                     <th>
-                        </th>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -42,10 +42,10 @@
                         <td class="text-center">
                             <div class="w-75 btn-group" role="group">
                                 <a asp-controller="Category" asp-action="Edit" asp-route-Id="@obj.Id" class="btn btn-warning mx-2">
-                                    Edit
+                                    <i class="fas fa-edit"></i> &nbsp;  Edit
                                 </a>
                                 <a asp-controller="Category" asp-action="Delete" asp-route-Id="@obj.Id" class="btn btn-danger mx-2">
-                                    Delete
+                                    <i class="far fa-trash-alt"></i> &nbsp; Delete
                                 </a>
                             </div>
                         </td>
