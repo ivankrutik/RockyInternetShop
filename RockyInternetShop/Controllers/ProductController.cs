@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using RockyInternetShop.Data;
 using RockyInternetShop.Models;
+using RockyInternetShop.Models.ViewModel;
 
 namespace RockyInternetShop.Controllers
 {
@@ -27,22 +29,30 @@ namespace RockyInternetShop.Controllers
 
         public IActionResult Upsert(long? id)
         {
-            var product = new Product();
+            var ProductVM = new ProductVM()
+            {
+                Product = new Product(),
+                CategoryAll = _dbContext.Category.Select(x =>
+                new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                })
+            };
+
             if (id == null)
             {
-                return View(product);
+                return View(ProductVM);
             }
             else
             {
-                product = _dbContext.Product.Find(id);
-                if (product != null)
+                ProductVM.Product = _dbContext.Product.Find(id);
+                if (ProductVM.Product != null)
                 {
-                    return View(product);
+                    return View(ProductVM);
                 }
                 return NotFound();
             }
-
-            return View();
         }
 
         [HttpPost]
