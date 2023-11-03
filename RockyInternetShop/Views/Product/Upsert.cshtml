@@ -66,6 +66,7 @@
                                 --Select category--
                             </option>
                         </select>
+                        <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -95,7 +96,10 @@
                 </div>
             </div>
             <div class="col-4">
-                @* Keep this empty *@
+                @if (Model.Product.Id != 0)
+                {
+                    <img src="@WebConstant.ImgPath@Model.Product.ImageUrl" width="100%" style="border-radius:5px; border:1px solid #bbb" />
+                }
             </div>
         </div>
     </div>
