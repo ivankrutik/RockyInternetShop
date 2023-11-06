@@ -56,12 +56,12 @@ namespace RockyInternetShop.Controllers
                 var files = HttpContext.Request.Form.Files;
                 string webRootPath = _webHostEnvironment.WebRootPath;
 
-                string upload = webRootPath + WebConstant.ImgPath;
-                string fileName = Guid.NewGuid().ToString();
-                string extension = Path.GetExtension(files[0].FileName);
-
                 if (productVM.Product.Id == 0)
                 {
+                    string upload = webRootPath + WebConstant.ImgPath;
+                    string fileName = Guid.NewGuid().ToString();
+                    string extension = Path.GetExtension(files[0].FileName);
+
                     var path = Path.Combine(upload, fileName + extension);
                     using (var fileStream = new FileStream(path, FileMode.Create))
                     {
@@ -77,6 +77,10 @@ namespace RockyInternetShop.Controllers
 
                     if (files.Count > 0)
                     {
+                        string upload = webRootPath + WebConstant.ImgPath;
+                        string fileName = Guid.NewGuid().ToString();
+                        string extension = Path.GetExtension(files[0].FileName);
+
                         var oldFile = Path.Combine(upload, objFromDb.ImageUrl);
                         if (System.IO.File.Exists(oldFile))
                         {
