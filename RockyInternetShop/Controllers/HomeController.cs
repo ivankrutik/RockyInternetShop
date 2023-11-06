@@ -28,6 +28,17 @@ namespace RockyInternetShop.Controllers
             return View(homeVM);
         }
 
+        public IActionResult Details(long id)
+        {
+            DetailsVM vm = new DetailsVM()
+            {
+                Product = _appDbContext.Product.Include(x => x.Category).Include(z => z.AppType).FirstOrDefault(z => z.Id == id),
+                IsExistInCart = false
+            };
+
+            return View(vm);
+        }
+
         public IActionResult Privacy()
         {
             return View();
