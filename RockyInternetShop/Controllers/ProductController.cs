@@ -20,13 +20,7 @@ namespace RockyInternetShop.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Product> Products = _dbContext.Product;
-
-            foreach (Product product in Products)
-            {
-                product.Category = _dbContext.Category.FirstOrDefault(x => x.Id == product.CategoryId);
-            }
-
+            IEnumerable<Product> Products = _dbContext.Product.Include(x => x.AppType).Include(x => x.Category);
             return View(Products);
         }
 
@@ -35,13 +29,8 @@ namespace RockyInternetShop.Controllers
             var ProductVM = new ProductVM()
             {
                 Product = new Product(),
-                CategoryAll = _dbContext.Category.Select(x =>
-                new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                })
             };
+            FillDefaultValueVM(ProductVM);
 
             if (id == null)
             {
@@ -67,11 +56,12 @@ namespace RockyInternetShop.Controllers
                 var files = HttpContext.Request.Form.Files;
                 string webRootPath = _webHostEnvironment.WebRootPath;
 
+                string upload = webRootPath + WebConstant.ImgPath;
+                string fileName = Guid.NewGuid().ToString();
+                string extension = Path.GetExtension(files[0].FileName);
+
                 if (productVM.Product.Id == 0)
                 {
-                    string upload = webRootPath + WebConstant.ImgPath;
-                    string fileName = Guid.NewGuid().ToString();
-                    string extension = Path.GetExtension(files[0].FileName);
                     var path = Path.Combine(upload, fileName + extension);
                     using (var fileStream = new FileStream(path, FileMode.Create))
                     {
@@ -87,10 +77,6 @@ namespace RockyInternetShop.Controllers
 
                     if (files.Count > 0)
                     {
-                        string upload = webRootPath + WebConstant.ImgPath;
-                        string fileName = Guid.NewGuid().ToString();
-                        string extension = Path.GetExtension(files[0].FileName);
-
                         var oldFile = Path.Combine(upload, objFromDb.ImageUrl);
                         if (System.IO.File.Exists(oldFile))
                         {
@@ -117,44 +103,65 @@ namespace RockyInternetShop.Controllers
                 return RedirectToAction("Index");
             }
 
-            productVM.CategoryAll = _dbContext.Category.Select(x =>
-                new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                });
+            FillDefaultValueVM(productVM);
 
             return View(productVM);
         }
 
-        /*  public IActionResult Delete(long? id)
-          {
-              if (id == 0 || id == null)
-              {
-                  return NotFound();
-              }
-              var category = _dbContext.Category.Find(id);
-              if (category == null)
-              {
-                  return NotFound();
-              }
+        public IActionResult Delete(long? id)
+        {
+            if (id == 0 || id == null)
+            {
+                return NotFound();
+            }
+            var product = _dbContext.Product.Include(x => x.Category).Include(x => x.AppType).FirstOrDefault(x => x.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
-              return View(category);
-          }
+            return View(product);
+        }
 
-          [HttpPost]
-          [ValidateAntiForgeryToken]
-          public IActionResult DeletePost(long? id)
-          {
-              var category = _dbContext.Category.Find(id);
-              if (category == null)
-              {
-                  return NotFound();
-              }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost(long? id)
+        {
+            var product = _dbContext.Product.Find(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
-              _dbContext.Category.Remove(category);
-              _dbContext.SaveChanges();
-              return RedirectToAction("Index");
-          }*/
+            if (product.ImageUrl != null)
+            {
+                string upload = _webHostEnvironment.WebRootPath + WebConstant.ImgPath;
+                var file = Path.Combine(upload, product.ImageUrl);
+                if (System.IO.File.Exists(file))
+                {
+                    System.IO.File.Delete(file);
+                }
+            }
+
+            _dbContext.Product.Remove(product);
+            _dbContext.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
+        private void FillDefaultValueVM(ProductVM vm)
+        {
+            vm.CategoryAll = _dbContext.Category.Select(x =>
+             new SelectListItem
+             {
+                 Text = x.Name,
+                 Value = x.Id.ToString()
+             });
+            vm.AppTypesAll = _dbContext.ApplicationType.Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
+        }
     }
 }

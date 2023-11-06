@@ -23,5 +23,10 @@ namespace RockyInternetShop.Models
 
         [ForeignKey(nameof(CategoryId))]
         public virtual Category? Category { get; set; }
+
+        [Display(Name = "Application Type")]
+        public long AppTypeId { get; set; }
+        [ForeignKey(nameof(AppTypeId))]
+        public virtual ApplicationType? AppType { get; set; }
     }
 }
