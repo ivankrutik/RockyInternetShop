@@ -44,6 +44,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="ApplicationType" asp-action="Index">AppType</a>
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Product</a>
                                 <div class="dropdown-divider"></div>
+                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Create Admin user</a>
                             </div>
                         </li>
                         <li>
@@ -65,6 +66,7 @@
                         </li>
                     </ul>
                 </div>
+                <partial name="_LoginPartial"></partial>
             </div>
         </nav>
     </header>
