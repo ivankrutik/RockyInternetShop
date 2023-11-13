@@ -56,11 +56,12 @@ namespace RockyInternetShop.Controllers
                 shpCarts = HttpContext.Session.Get<List<ShoppingCart>>(WebConstant.SessionCart);
             }
             var prodId = shpCarts.Select(z => z.ProductId);
-            var products = _appDbContext.Product.Where(z => prodId.Contains(z.Id));
+            var products = _appDbContext.Product.Where(z => prodId.Contains(z.Id)).ToList();
 
             ProdUserVm = new ProductUserVM
             {
-                AppUser = UserId != null ? _appDbContext.AppUsers.FirstOrDefault(z => z.UserName == UserId) : new AppUser()
+                AppUser = UserId != null ? _appDbContext.AppUsers.FirstOrDefault(z => z.UserName == UserId) : new AppUser(),
+                Products = products
             };
 
             return View(ProdUserVm);
