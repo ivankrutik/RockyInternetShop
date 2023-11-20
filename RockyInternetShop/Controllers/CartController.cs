@@ -67,6 +67,21 @@ namespace RockyInternetShop.Controllers
             return View(ProdUserVm);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Summary")]
+        public IActionResult SummaryPost(ProductUserVM ProdUserVm)
+        {
+            return RedirectToAction(nameof(InquiryConfirmation));
+        }
+
+        public IActionResult InquiryConfirmation()
+        {
+            HttpContext.Session.Clear();
+            return View();
+        }
+
+
         public IActionResult Remove(long id)
         {
             var shpCarts = new List<ShoppingCart>();
