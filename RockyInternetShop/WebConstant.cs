@@ -2,10 +2,12 @@
 {
     public static class WebConstant
     {
-        public static string ImgPath = @"\images\product\";
-        public static string SessionCart = @"ShoppingCartSession";
+        public const string ImgPath = @"\images\product\";
+        public const string SessionCart = @"ShoppingCartSession";
 
-        public static string AdminRole = "Admin";
-        public static string CustomerRole = "Customer";
+        public const string AdminRole = "Admin";
+        public const string CustomerRole = "Customer";
+
+        public const string EmailAdmin = "ivan.krutik@gmail.com";
     }
 }

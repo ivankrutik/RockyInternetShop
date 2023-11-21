@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RockyInternetShop.Data;
 using RockyInternetShop.Models;
 
 namespace RockyInternetShop.Controllers
 {
+    [Authorize(Roles = WebConstant.AdminRole)]
     public class CategoryController : Controller
     {
         private readonly AppDbContext _dbContext;

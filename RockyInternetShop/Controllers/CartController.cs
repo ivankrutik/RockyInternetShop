@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using RockyInternetShop.Data;
 using RockyInternetShop.Models;
 using RockyInternetShop.Models.ViewModel;
 using RockyInternetShop.Utility;
 using System.Security.Claims;
+using System.Text;
 
 namespace RockyInternetShop.Controllers
 {
@@ -12,13 +14,17 @@ namespace RockyInternetShop.Controllers
     public class CartController : Controller
     {
         private readonly AppDbContext _appDbContext;
+        private readonly IWebHostEnvironment _webHostEnv;
+        private readonly IEmailSender _emailSender;
 
         [BindProperty]
         public ProductUserVM ProdUserVm { get; set; }
 
-        public CartController(AppDbContext appDbContext)
+        public CartController(AppDbContext appDbContext, IWebHostEnvironment webHostEnv, IEmailSender emailSender)
         {
             _appDbContext = appDbContext;
+            _webHostEnv = webHostEnv;
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -70,8 +76,26 @@ namespace RockyInternetShop.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Summary")]
-        public IActionResult SummaryPost(ProductUserVM ProdUserVm)
+        public async Task<IActionResult> SummaryPostAsync(ProductUserVM ProdUserVm)
         {
+            var PathToTemplate = _webHostEnv.WebRootPath + Path.DirectorySeparatorChar.ToString() + "templates" + Path.DirectorySeparatorChar.ToString() + "Inquiry.html";
+            var Subject = "New Inquiry";
+            string HtmlBody = string.Empty;
+            using (StreamReader sr = System.IO.File.OpenText(PathToTemplate))
+            {
+                HtmlBody = sr.ReadToEnd();
+            }
+
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (var prod in ProdUserVm.Products)
+            {
+                stringBuilder.Append($" - Name: {prod.Name} <span style='font-size:14px;'> (ID: {prod.Id})</span><br></br>");
+            }
+
+            string messageBody = string.Format(HtmlBody, ProdUserVm.AppUser.FullName, ProdUserVm.AppUser.Email, ProdUserVm.AppUser.PhoneNumber, stringBuilder.ToString());
+
+            await _emailSender.SendEmailAsync(WebConstant.EmailAdmin, Subject, messageBody);
+
             return RedirectToAction(nameof(InquiryConfirmation));
         }
 

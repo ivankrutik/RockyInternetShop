@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RockyInternetShop.Data;
@@ -7,6 +8,7 @@ using RockyInternetShop.Models.ViewModel;
 
 namespace RockyInternetShop.Controllers
 {
+    [Authorize(Roles = WebConstant.AdminRole)]
     public class ProductController : Controller
     {
         private readonly AppDbContext _dbContext;
