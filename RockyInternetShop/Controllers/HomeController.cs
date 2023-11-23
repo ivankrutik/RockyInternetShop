@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RockyInternetShop.Data;
 using RockyInternetShop.Models;
 using RockyInternetShop.Models.ViewModel;
-using RockyInternetShop.Utility;
+using RockyUtility;
 using System.Diagnostics;
 
 namespace RockyInternetShop.Controllers

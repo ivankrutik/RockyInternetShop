@@ -1,4 +1,4 @@
-﻿namespace RockyInternetShop
+﻿namespace RockyUtility
 {
     public static class WebConstant
     {

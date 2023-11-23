@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RockyInternetShop.Data;
 using RockyInternetShop.Models;
 using RockyInternetShop.Models.ViewModel;
-using RockyInternetShop.Utility;
+using RockyUtility;
 using System.Security.Claims;
 using System.Text;
 

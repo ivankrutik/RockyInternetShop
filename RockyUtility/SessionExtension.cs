@@ -1,6 +1,7 @@
-﻿using System.Text.Json;
+﻿using Microsoft.AspNetCore.Http;
+using System.Text.Json;
 
-namespace RockyInternetShop.Utility
+namespace RockyUtility
 {
     public static class SessionExtension
     {

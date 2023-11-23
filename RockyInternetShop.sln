@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockyInternetShop", "RockyInternetShop\RockyInternetShop.csproj", "{0F64FC9B-7C6C-4F64-9AB5-624BE5D38187}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockyUtility", "RockyUtility\RockyUtility.csproj", "{DC624BE7-7A5B-49F0-BF20-C134F4D95C1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0F64FC9B-7C6C-4F64-9AB5-624BE5D38187}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F64FC9B-7C6C-4F64-9AB5-624BE5D38187}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F64FC9B-7C6C-4F64-9AB5-624BE5D38187}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC624BE7-7A5B-49F0-BF20-C134F4D95C1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC624BE7-7A5B-49F0-BF20-C134F4D95C1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC624BE7-7A5B-49F0-BF20-C134F4D95C1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC624BE7-7A5B-49F0-BF20-C134F4D95C1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

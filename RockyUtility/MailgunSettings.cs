@@ -1,4 +1,4 @@
-﻿namespace RockyInternetShop.Utility
+﻿namespace RockyUtility
 {
     public class MailgunSettings
     {

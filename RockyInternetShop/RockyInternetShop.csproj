@@ -25,4 +25,8 @@
     <Folder Include="wwwroot\images\product\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RockyUtility\RockyUtility.csproj" />
+  </ItemGroup>
+
 </Project>

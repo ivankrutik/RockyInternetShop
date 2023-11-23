@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Configuration;
 using RestSharp;
 using RestSharp.Authenticators;
 
-namespace RockyInternetShop.Utility
+namespace RockyUtility
 {
     public class EmailSender : IEmailSender
     {

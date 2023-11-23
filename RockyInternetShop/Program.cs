@@ -2,7 +2,7 @@ using RockyInternetShop.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using RockyInternetShop.Utility;
+using RockyUtility;
 
 var builder = WebApplication.CreateBuilder(args);
 
