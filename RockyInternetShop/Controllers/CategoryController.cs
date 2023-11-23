@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RockyInternetShop.Data;
-using RockyInternetShop.Models;
+using RockyModels;
 using RockyUtility;
 
 namespace RockyInternetShop.Controllers

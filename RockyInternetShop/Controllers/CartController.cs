@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using RockyInternetShop.Data;
-using RockyInternetShop.Models;
-using RockyInternetShop.Models.ViewModel;
+using RockyModels;
+using RockyModels.ViewModel;
 using RockyUtility;
 using System.Security.Claims;
 using System.Text;

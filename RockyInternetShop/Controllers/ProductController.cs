@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RockyInternetShop.Data;
-using RockyInternetShop.Models;
-using RockyInternetShop.Models.ViewModel;
+using RockyModels;
+using RockyModels.ViewModel;
 using RockyUtility;
 
 namespace RockyInternetShop.Controllers

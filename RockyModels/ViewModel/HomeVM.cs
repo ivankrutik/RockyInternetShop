@@ -1,4 +1,4 @@
-﻿namespace RockyInternetShop.Models.ViewModel
+﻿namespace RockyModels.ViewModel
 {
     public class HomeVM
     {

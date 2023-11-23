@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace RockyInternetShop.Models
+namespace RockyModels
 {
     public class Category
     {

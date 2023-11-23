@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RockyInternetShop.Models
+namespace RockyModels
 {
     public class ApplicationType
     {

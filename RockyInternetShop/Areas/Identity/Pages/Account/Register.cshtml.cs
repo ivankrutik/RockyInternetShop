@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using RockyInternetShop.Models;
+using RockyModels;
 using RockyUtility;
 
 namespace RockyInternetShop.Areas.Identity.Pages.Account
