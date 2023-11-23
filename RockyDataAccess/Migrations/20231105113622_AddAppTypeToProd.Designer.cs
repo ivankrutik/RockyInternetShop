@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RockyInternetShop.Data;
+using RockyDataAccess.Data;
 
 #nullable disable
 
-namespace RockyInternetShop.Migrations
+namespace RockyDataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231105113913_AddAppTypeToProd3")]
-    partial class AddAppTypeToProd3
+    [Migration("20231105113622_AddAppTypeToProd")]
+    partial class AddAppTypeToProd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

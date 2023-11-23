@@ -1,4 +1,4 @@
-using RockyInternetShop.Data;
+using RockyDataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;

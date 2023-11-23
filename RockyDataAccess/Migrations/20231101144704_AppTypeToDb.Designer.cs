@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RockyInternetShop.Data;
+using RockyDataAccess.Data;
 
 #nullable disable
 
-namespace RockyInternetShop.Migrations
+namespace RockyDataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231105113732_AddAppTypeToProd2")]
-    partial class AddAppTypeToProd2
+    [Migration("20231101144704_AppTypeToDb")]
+    partial class AppTypeToDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,9 +69,6 @@ namespace RockyInternetShop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("AppTypeId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
 
@@ -90,8 +87,6 @@ namespace RockyInternetShop.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppTypeId");
-
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Product");
@@ -99,19 +94,11 @@ namespace RockyInternetShop.Migrations
 
             modelBuilder.Entity("RockyInternetShop.Models.Product", b =>
                 {
-                    b.HasOne("RockyInternetShop.Models.ApplicationType", "AppType")
-                        .WithMany()
-                        .HasForeignKey("AppTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RockyInternetShop.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AppType");
 
                     b.Navigation("Category");
                 });

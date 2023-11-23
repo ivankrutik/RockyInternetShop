@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace RockyInternetShop.Migrations
+namespace RockyDataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class AddAppTypeToProd : Migration

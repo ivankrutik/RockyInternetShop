@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace RockyInternetShop.Migrations
+namespace RockyDataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class addAuth : Migration

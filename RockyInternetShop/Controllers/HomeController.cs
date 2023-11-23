@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RockyInternetShop.Data;
+using RockyDataAccess.Data;
 using RockyModels;
 using RockyModels.ViewModel;
 using RockyUtility;

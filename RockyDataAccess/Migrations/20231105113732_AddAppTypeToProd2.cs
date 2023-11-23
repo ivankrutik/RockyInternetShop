@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace RockyInternetShop.Migrations
+namespace RockyDataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAppTypeToProd3 : Migration
+    public partial class AddAppTypeToProd2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

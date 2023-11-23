@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RockyInternetShop.Data;
+using RockyDataAccess.Data;
 
 #nullable disable
 
-namespace RockyInternetShop.Migrations
+namespace RockyDataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -175,12 +175,10 @@ namespace RockyInternetShop.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -217,12 +215,10 @@ namespace RockyInternetShop.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -232,7 +228,7 @@ namespace RockyInternetShop.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RockyInternetShop.Models.ApplicationType", b =>
+            modelBuilder.Entity("RockyModels.ApplicationType", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -249,7 +245,7 @@ namespace RockyInternetShop.Migrations
                     b.ToTable("ApplicationType");
                 });
 
-            modelBuilder.Entity("RockyInternetShop.Models.Category", b =>
+            modelBuilder.Entity("RockyModels.Category", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -269,7 +265,7 @@ namespace RockyInternetShop.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("RockyInternetShop.Models.Product", b =>
+            modelBuilder.Entity("RockyModels.Product", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -305,7 +301,7 @@ namespace RockyInternetShop.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("RockyInternetShop.Models.AppUser", b =>
+            modelBuilder.Entity("RockyModels.AppUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -367,15 +363,15 @@ namespace RockyInternetShop.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RockyInternetShop.Models.Product", b =>
+            modelBuilder.Entity("RockyModels.Product", b =>
                 {
-                    b.HasOne("RockyInternetShop.Models.ApplicationType", "AppType")
+                    b.HasOne("RockyModels.ApplicationType", "AppType")
                         .WithMany()
                         .HasForeignKey("AppTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RockyInternetShop.Models.Category", "Category")
+                    b.HasOne("RockyModels.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
