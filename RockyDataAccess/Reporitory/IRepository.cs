@@ -23,6 +23,6 @@ namespace RockyDataAccess.Reporitory
         void Add(T entity);
         void Remove(T entity);
 
-        void Save();
+        void SaveChanges();
     }
 }

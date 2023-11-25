@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RockyDataAccess.Data;
+using RockyDataAccess.Reporitory.CategoryDomain;
 using RockyModels;
 using RockyUtility;
 
@@ -9,16 +9,16 @@ namespace RockyInternetShop.Controllers
     [Authorize(Roles = WebConstant.AdminRole)]
     public class CategoryController : Controller
     {
-        private readonly AppDbContext _dbContext;
+        private readonly ICategoryRepository _rep;
 
-        public CategoryController(AppDbContext dbContext)
+        public CategoryController(ICategoryRepository rep)
         {
-            _dbContext = dbContext;
+            _rep = rep;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Category> categories = _dbContext.Category;
+            IEnumerable<Category> categories = _rep.GetAll();
             return View(categories);
         }
 
@@ -33,8 +33,8 @@ namespace RockyInternetShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dbContext.Category.Add(category);
-                _dbContext.SaveChanges();
+                _rep.Add(category);
+                _rep.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -46,7 +46,7 @@ namespace RockyInternetShop.Controllers
             {
                 return NotFound();
             }
-            var category = _dbContext.Category.Find(id);
+            var category = _rep.Find((long)id);
             if (category == null)
             {
                 return NotFound();
@@ -61,8 +61,8 @@ namespace RockyInternetShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dbContext.Category.Update(category);
-                _dbContext.SaveChanges();
+                _rep.Update(category);
+                _rep.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -74,7 +74,7 @@ namespace RockyInternetShop.Controllers
             {
                 return NotFound();
             }
-            var category = _dbContext.Category.Find(id);
+            var category = _rep.Find((long)id);
             if (category == null)
             {
                 return NotFound();
@@ -87,14 +87,18 @@ namespace RockyInternetShop.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(long? id)
         {
-            var category = _dbContext.Category.Find(id);
+            if (id == 0 || id == null)
+            {
+                return NotFound();
+            }
+            var category = _rep.Find((long)id);
             if (category == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Category.Remove(category);
-            _dbContext.SaveChanges();
+            _rep.Remove(category);
+            _rep.SaveChanges();
             return RedirectToAction("Index");
         }
     }

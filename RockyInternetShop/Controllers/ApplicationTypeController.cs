@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RockyDataAccess.Data;
+using RockyDataAccess.Reporitory.AppTypeDomain;
 using RockyModels;
 using RockyUtility;
 
@@ -9,16 +9,16 @@ namespace RockyInternetShop.Controllers
     [Authorize(Roles = WebConstant.AdminRole)]
     public class ApplicationTypeController : Controller
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IAppTypeRepository _rep;
 
-        public ApplicationTypeController(AppDbContext dbContext)
+        public ApplicationTypeController(IAppTypeRepository rep)
         {
-            _dbContext = dbContext;
+            _rep = rep;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<ApplicationType> AppType = _dbContext.ApplicationType;
+            IEnumerable<ApplicationType> AppType = _rep.GetAll();
             return View(AppType);
         }
 
@@ -33,8 +33,8 @@ namespace RockyInternetShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dbContext.ApplicationType.Add(appType);
-                _dbContext.SaveChanges();
+                _rep.Add(appType);
+                _rep.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(appType);
@@ -46,7 +46,7 @@ namespace RockyInternetShop.Controllers
             {
                 return NotFound();
             }
-            var appType = _dbContext.ApplicationType.Find(id);
+            var appType = _rep.Find((long)id);
             if (appType == null)
             {
                 return NotFound();
@@ -60,8 +60,8 @@ namespace RockyInternetShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dbContext.ApplicationType.Update(appType);
-                _dbContext.SaveChanges();
+                _rep.Update(appType);
+                _rep.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(appType);
@@ -73,7 +73,7 @@ namespace RockyInternetShop.Controllers
             {
                 return NotFound();
             }
-            var appType = _dbContext.ApplicationType.Find(id);
+            var appType = _rep.Find((long)id);
             if (appType == null)
             {
                 return NotFound();
@@ -85,14 +85,18 @@ namespace RockyInternetShop.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(long? id)
         {
-            var appType = _dbContext.ApplicationType.Find(id);
+            if (id == 0 || id == null)
+            {
+                return NotFound();
+            }
+            var appType = _rep.Find((long)id);
             if (appType == null)
             {
                 return NotFound();
             }
 
-            _dbContext.ApplicationType.Remove(appType);
-            _dbContext.SaveChanges();
+            _rep.Remove(appType);
+            _rep.SaveChanges();
             return RedirectToAction("Index");
         }
     }

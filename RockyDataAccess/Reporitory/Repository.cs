@@ -77,7 +77,7 @@ namespace RockyDataAccess.Reporitory
             dbSet.Remove(entity);
         }
 
-        public void Save()
+        public void SaveChanges()
         {
             _dbContext.SaveChanges();
         }
