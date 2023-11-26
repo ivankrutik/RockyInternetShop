@@ -9,5 +9,8 @@
         public const string CustomerRole = "Customer";
 
         public const string EmailAdmin = "ivan.krutik@gmail.com";
+
+        public const string CategoryName = "Category";
+        public const string AppTypeName = "AppType";
     }
 }

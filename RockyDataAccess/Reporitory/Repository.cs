@@ -56,7 +56,7 @@ namespace RockyDataAccess.Reporitory
             }
             if (includedProperties != null)
             {
-                foreach (var property in includedProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                foreach (var property in includedProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query.Include(property);
                 }

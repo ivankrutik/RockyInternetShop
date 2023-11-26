@@ -1,29 +1,29 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using RockyDataAccess.Data;
+using RockyDataAccess.Reporitory.ProductDomain;
 using RockyModels;
 using RockyModels.ViewModel;
 using RockyUtility;
+using System.Security.AccessControl;
 
 namespace RockyInternetShop.Controllers
 {
     [Authorize(Roles = WebConstant.AdminRole)]
     public class ProductController : Controller
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IProductRepository _rep;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(AppDbContext dbContext, IWebHostEnvironment webHostEnvironment)
+        public ProductController(IProductRepository rep, IWebHostEnvironment webHostEnvironment)
         {
-            _dbContext = dbContext;
+            _rep = rep;
             _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Product> Products = _dbContext.Product.Include(x => x.AppType).Include(x => x.Category);
+            IEnumerable<Product> Products = _rep.GetAll(includedProperties: "Category,AppType");
             return View(Products);
         }
 
@@ -41,7 +41,7 @@ namespace RockyInternetShop.Controllers
             }
             else
             {
-                ProductVM.Product = _dbContext.Product.Find(id);
+                ProductVM.Product = _rep.Find((long)id);
                 if (ProductVM.Product != null)
                 {
                     return View(ProductVM);
@@ -72,11 +72,11 @@ namespace RockyInternetShop.Controllers
                     }
 
                     productVM.Product.ImageUrl = fileName + extension;
-                    _dbContext.Product.Add(productVM.Product);
+                    _rep.Add(productVM.Product);
                 }
                 else
                 {
-                    var objFromDb = _dbContext.Product.AsNoTracking().FirstOrDefault(x => x.Id == productVM.Product.Id);
+                    var objFromDb = _rep.FirstOrDefault(filter: x => x.Id == productVM.Product.Id, isTracking: false);
 
                     if (files.Count > 0)
                     {
@@ -103,10 +103,10 @@ namespace RockyInternetShop.Controllers
                         productVM.Product.ImageUrl = objFromDb.ImageUrl;
                     }
 
-                    _dbContext.Product.Update(productVM.Product);
+                    _rep.Update(productVM.Product);
                 }
 
-                _dbContext.SaveChanges();
+                _rep.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -121,7 +121,7 @@ namespace RockyInternetShop.Controllers
             {
                 return NotFound();
             }
-            var product = _dbContext.Product.Include(x => x.Category).Include(x => x.AppType).FirstOrDefault(x => x.Id == id);
+            var product = _rep.FirstOrDefault(filter: x => x.Id == id, includedProperties: "Category,AppType");
             if (product == null)
             {
                 return NotFound();
@@ -134,7 +134,11 @@ namespace RockyInternetShop.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(long? id)
         {
-            var product = _dbContext.Product.Find(id);
+            if (id == 0 || id == null)
+            {
+                return NotFound();
+            }
+            var product = _rep.Find((long)id);
             if (product == null)
             {
                 return NotFound();
@@ -150,25 +154,16 @@ namespace RockyInternetShop.Controllers
                 }
             }
 
-            _dbContext.Product.Remove(product);
-            _dbContext.SaveChanges();
+            _rep.Remove(product);
+            _rep.SaveChanges();
             return RedirectToAction("Index");
         }
 
 
         private void FillDefaultValueVM(ProductVM vm)
         {
-            vm.CategoryAll = _dbContext.Category.Select(x =>
-             new SelectListItem
-             {
-                 Text = x.Name,
-                 Value = x.Id.ToString()
-             });
-            vm.AppTypesAll = _dbContext.ApplicationType.Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.Id.ToString()
-            });
+            vm.CategoryAll = _rep.GetAllDropDownList(WebConstant.CategoryName);
+            vm.AppTypesAll = _rep.GetAllDropDownList(WebConstant.AppTypeName);
         }
     }
 }

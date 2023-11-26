@@ -10,6 +10,11 @@ namespace RockyDataAccess.Data
         {
 
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            //optionsBuilder.UseSqlServer(@"Server=DESKTOP-KQEGRRC;Database=RockyShop;Trusted_Connection=true;MultipleActiveResultSets=True;TrustServerCertificate=True");
+            optionsBuilder.LogTo(System.Console.WriteLine);
+        }
 
         public DbSet<Category> Category { get; set; }
         public DbSet<Product> Product { get; set; }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using RockyUtility;
 using RockyDataAccess.Reporitory.CategoryDomain;
 using RockyDataAccess.Reporitory.AppTypeDomain;
+using RockyDataAccess.Reporitory.ProductDomain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IAppTypeRepository, AppTypeRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders().AddDefaultUI().AddEntityFrameworkStores<AppDbContext>();
