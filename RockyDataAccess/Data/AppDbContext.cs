@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RockyModels;
+using RockyModels.InquiryDomain;
 
 namespace RockyDataAccess.Data
 {
@@ -12,7 +13,6 @@ namespace RockyDataAccess.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer(@"Server=DESKTOP-KQEGRRC;Database=RockyShop;Trusted_Connection=true;MultipleActiveResultSets=True;TrustServerCertificate=True");
             optionsBuilder.LogTo(System.Console.WriteLine);
         }
 
@@ -21,5 +21,8 @@ namespace RockyDataAccess.Data
 
         public DbSet<ApplicationType> ApplicationType { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
+
+        public DbSet<InquiryDetail> InquiryDetail { get; set; }
+        public DbSet<InquiryHeader> InquiryHeader { get; set; }
     }
 }
