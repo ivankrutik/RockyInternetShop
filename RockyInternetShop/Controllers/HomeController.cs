@@ -1,30 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RockyDataAccess.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using RockyDataAccess.Reporitory.CategoryDomain;
+using RockyDataAccess.Reporitory.ProductDomain;
 using RockyModels;
 using RockyModels.ViewModel;
 using RockyUtility;
 using System.Diagnostics;
+using System.Linq;
 
 namespace RockyInternetShop.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly AppDbContext _appDbContext;
+        private readonly IProductRepository _prodRep;
+        private readonly ICategoryRepository _catRep;
 
-        public HomeController(ILogger<HomeController> logger, AppDbContext appDbContext)
+        public HomeController(ILogger<HomeController> logger, IProductRepository prodRep, ICategoryRepository catRep)
         {
             _logger = logger;
-            _appDbContext = appDbContext;
+            _prodRep = prodRep;
+            _catRep = catRep;
         }
 
         public IActionResult Index()
         {
             HomeVM homeVM = new HomeVM()
             {
-                Products = _appDbContext.Product.Include(c => c.Category).Include(z => z.AppType),
-                Categories = _appDbContext.Category
+                Products = _prodRep.GetAll(includedProperties: "Category,AppType"),
+                Categories = _catRep.GetAll()
             };
             return View(homeVM);
         }
@@ -44,7 +48,7 @@ namespace RockyInternetShop.Controllers
 
             DetailsVM vm = new DetailsVM()
             {
-                Product = _appDbContext.Product.Include(x => x.Category).Include(z => z.AppType).FirstOrDefault(z => z.Id == id),
+                Product = _prodRep.FirstOrDefault(filter: z => z.Id == id, includedProperties: "Category,AppType"),
                 IsExistInCart = IsExistInCart
             };
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RockyDataAccess.Reporitory
 {
@@ -35,7 +34,7 @@ namespace RockyDataAccess.Reporitory
             {
                 foreach (var property in includedProperties.Split(',', StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query.Include(property);
+                    query = query.Include(property);
                 }
             }
             if (!isTracking)

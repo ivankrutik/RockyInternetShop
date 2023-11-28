@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using RockyDataAccess.Data;
+using RockyDataAccess.Reporitory.AppUserDomain;
+using RockyDataAccess.Reporitory.InquiryDomain;
+using RockyDataAccess.Reporitory.ProductDomain;
 using RockyModels;
 using RockyModels.ViewModel;
 using RockyUtility;
@@ -13,18 +16,29 @@ namespace RockyInternetShop.Controllers
     [Authorize]
     public class CartController : Controller
     {
-        private readonly AppDbContext _appDbContext;
         private readonly IWebHostEnvironment _webHostEnv;
         private readonly IEmailSender _emailSender;
+        private readonly IProductRepository _prodRep;
+        private readonly IAppUserRepository _userRep;
+        private readonly IInquiryHeaderRepository _inqHdrRep;
+        private readonly IInquiryDetailRepository _inqDtlRep;
 
         [BindProperty]
         public ProductUserVM ProdUserVm { get; set; }
 
-        public CartController(AppDbContext appDbContext, IWebHostEnvironment webHostEnv, IEmailSender emailSender)
+        public CartController(IWebHostEnvironment webHostEnv,
+                                IEmailSender emailSender,
+                                IProductRepository prodRep,
+                                 IAppUserRepository userRep,
+                                 IInquiryHeaderRepository inqHdrRep,
+                                 IInquiryDetailRepository inqDtlRep)
         {
-            _appDbContext = appDbContext;
             _webHostEnv = webHostEnv;
             _emailSender = emailSender;
+            _prodRep = prodRep;
+            _userRep = userRep;
+            _inqHdrRep = inqHdrRep;
+            _inqDtlRep = inqDtlRep;
         }
 
         public IActionResult Index()
@@ -37,7 +51,7 @@ namespace RockyInternetShop.Controllers
                 shpCarts = HttpContext.Session.Get<List<ShoppingCart>>(WebConstant.SessionCart);
             }
             var prodId = shpCarts.Select(z => z.ProductId);
-            var products = _appDbContext.Product.Where(z => prodId.Contains(z.Id));
+            var products = _prodRep.GetAll(filter: z => prodId.Contains(z.Id));
 
             return View(products);
         }
@@ -62,11 +76,11 @@ namespace RockyInternetShop.Controllers
                 shpCarts = HttpContext.Session.Get<List<ShoppingCart>>(WebConstant.SessionCart);
             }
             var prodId = shpCarts.Select(z => z.ProductId);
-            var products = _appDbContext.Product.Where(z => prodId.Contains(z.Id)).ToList();
+            var products = _prodRep.GetAll(filter: z => prodId.Contains(z.Id)).ToList();
 
             ProdUserVm = new ProductUserVM
             {
-                AppUser = UserId != null ? _appDbContext.AppUsers.FirstOrDefault(z => z.UserName == UserId) : new AppUser(),
+                AppUser = UserId != null ? _userRep.FirstOrDefault(filter: z => z.UserName == UserId) : new AppUser(),
                 Products = products
             };
 

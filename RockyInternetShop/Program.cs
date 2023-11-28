@@ -6,6 +6,8 @@ using RockyUtility;
 using RockyDataAccess.Reporitory.CategoryDomain;
 using RockyDataAccess.Reporitory.AppTypeDomain;
 using RockyDataAccess.Reporitory.ProductDomain;
+using RockyDataAccess.Reporitory.InquiryDomain;
+using RockyDataAccess.Reporitory.AppUserDomain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,10 @@ builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IAppTypeRepository, AppTypeRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+builder.Services.AddScoped<IInquiryDetailRepository, InquiryDetailRepository>();
+builder.Services.AddScoped<IInquiryHeaderRepository, InquiryHeaderRepository>();
+builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders().AddDefaultUI().AddEntityFrameworkStores<AppDbContext>();
