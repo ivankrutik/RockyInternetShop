@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RockyDataAccess.Data;
+﻿using RockyDataAccess.Data;
 using RockyModels;
 
 namespace RockyDataAccess.Reporitory.AppUserDomain

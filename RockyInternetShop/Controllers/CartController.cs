@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using RockyDataAccess.Data;
+using Microsoft.CodeAnalysis;
 using RockyDataAccess.Reporitory.AppUserDomain;
 using RockyDataAccess.Reporitory.InquiryDomain;
 using RockyDataAccess.Reporitory.ProductDomain;
 using RockyModels;
+using RockyModels.InquiryDomain;
 using RockyModels.ViewModel;
 using RockyUtility;
 using System.Security.Claims;
@@ -92,6 +93,9 @@ namespace RockyInternetShop.Controllers
         [ActionName("Summary")]
         public async Task<IActionResult> SummaryPostAsync(ProductUserVM ProdUserVm)
         {
+            var claimIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
             var PathToTemplate = _webHostEnv.WebRootPath + Path.DirectorySeparatorChar.ToString() + "templates" + Path.DirectorySeparatorChar.ToString() + "Inquiry.html";
             var Subject = "New Inquiry";
             string HtmlBody = string.Empty;
@@ -106,9 +110,39 @@ namespace RockyInternetShop.Controllers
                 stringBuilder.Append($" - Name: {prod.Name} <span style='font-size:14px;'> (ID: {prod.Id})</span><br></br>");
             }
 
-            string messageBody = string.Format(HtmlBody, ProdUserVm.AppUser.FullName, ProdUserVm.AppUser.Email, ProdUserVm.AppUser.PhoneNumber, stringBuilder.ToString());
+            string messageBody = string.Format(HtmlBody,
+                                                ProdUserVm.AppUser.FullName,
+                                                ProdUserVm.AppUser.Email,
+                                                ProdUserVm.AppUser.PhoneNumber,
+                                                stringBuilder.ToString());
 
             await _emailSender.SendEmailAsync(WebConstant.EmailAdmin, Subject, messageBody);
+
+            /*register to db*/
+            var hdr = new InquiryHeader
+            {
+                AppUserId = claim.Value,
+                FullName = ProdUserVm.AppUser.FullName,
+                Email = ProdUserVm.AppUser.Email,
+                Phone = ProdUserVm.AppUser.PhoneNumber,
+                InquiryDate = DateTime.Now
+            };
+
+            _inqHdrRep.Add(hdr);
+            _inqHdrRep.SaveChanges();
+
+            foreach (var prod in ProdUserVm.Products)
+            {
+                var det = new InquiryDetail
+                {
+                    InquiryHeaderId = hdr.Id,
+                    ProductId = prod.Id
+                };
+
+                _inqDtlRep.Add(det);
+            }
+            _inqDtlRep.SaveChanges();
+
 
             return RedirectToAction(nameof(InquiryConfirmation));
         }
