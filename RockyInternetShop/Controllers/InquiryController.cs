@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RockyDataAccess.Reporitory.InquiryDomain;
 using RockyModels;
 using RockyModels.ViewModel;
@@ -6,6 +7,7 @@ using RockyUtility;
 
 namespace RockyInternetShop.Controllers
 {
+    [Authorize(WebConstant.AdminRole)]
     public class InquiryController : Controller
     {
         private readonly IInquiryHeaderRepository _headerRepository;
@@ -41,6 +43,15 @@ namespace RockyInternetShop.Controllers
             HttpContext.Session.Set(WebConstant.SessionInquiryId, InqVM.Header.Id);
 
             return RedirectToAction("Index", "Cart");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete()
+        {
+            _headerRepository.RemoveWithDeatails(InqVM.Header, _detailRepository);
+            _headerRepository.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Details(long id)

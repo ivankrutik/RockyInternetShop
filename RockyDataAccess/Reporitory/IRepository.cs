@@ -17,6 +17,7 @@ namespace RockyDataAccess.Reporitory
 
         void Add(T entity);
         void Remove(T entity);
+        void RemoveRange(IEnumerable<T> entities);
 
         void SaveChanges();
     }
