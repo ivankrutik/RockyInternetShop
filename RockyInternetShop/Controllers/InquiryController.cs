@@ -51,6 +51,9 @@ namespace RockyInternetShop.Controllers
         {
             _headerRepository.RemoveWithDeatails(InqVM.Header, _detailRepository);
             _headerRepository.SaveChanges();
+
+            TempData[WebConstant.Success] = "Deleted successfully";
+
             return RedirectToAction(nameof(Index));
         }
 

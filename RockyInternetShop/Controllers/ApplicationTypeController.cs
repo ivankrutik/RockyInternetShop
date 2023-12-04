@@ -35,6 +35,9 @@ namespace RockyInternetShop.Controllers
             {
                 _rep.Add(appType);
                 _rep.SaveChanges();
+
+                TempData[WebConstant.Success] = "Added successfully";
+
                 return RedirectToAction("Index");
             }
             return View(appType);
@@ -62,6 +65,9 @@ namespace RockyInternetShop.Controllers
             {
                 _rep.Update(appType);
                 _rep.SaveChanges();
+
+                TempData[WebConstant.Success] = "Edited successfully";
+
                 return RedirectToAction("Index");
             }
             return View(appType);
@@ -78,6 +84,7 @@ namespace RockyInternetShop.Controllers
             {
                 return NotFound();
             }
+
             return View(appType);
         }
 
@@ -97,6 +104,9 @@ namespace RockyInternetShop.Controllers
 
             _rep.Remove(appType);
             _rep.SaveChanges();
+
+            TempData[WebConstant.Success] = "Deleted successfully";
+
             return RedirectToAction("Index");
         }
     }

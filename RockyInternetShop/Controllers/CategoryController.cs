@@ -35,8 +35,13 @@ namespace RockyInternetShop.Controllers
             {
                 _rep.Add(category);
                 _rep.SaveChanges();
+
+                TempData[WebConstant.Success] = "Added successfully";
+
                 return RedirectToAction("Index");
             }
+            TempData[WebConstant.Error] = "Added error";
+
             return View(category);
         }
 
@@ -63,8 +68,13 @@ namespace RockyInternetShop.Controllers
             {
                 _rep.Update(category);
                 _rep.SaveChanges();
+
+                TempData[WebConstant.Success] = "Edited successfully";
+
                 return RedirectToAction("Index");
             }
+            TempData[WebConstant.Error] = "Edited error";
+
             return View(category);
         }
 
@@ -99,6 +109,9 @@ namespace RockyInternetShop.Controllers
 
             _rep.Remove(category);
             _rep.SaveChanges();
+
+            TempData[WebConstant.Success] = "Deleted successfully";
+
             return RedirectToAction("Index");
         }
     }

@@ -107,6 +107,9 @@ namespace RockyInternetShop.Controllers
                 }
 
                 _rep.SaveChanges();
+
+                TempData[WebConstant.Success] = "Successfully";
+
                 return RedirectToAction("Index");
             }
 
@@ -156,6 +159,9 @@ namespace RockyInternetShop.Controllers
 
             _rep.Remove(product);
             _rep.SaveChanges();
+
+            TempData[WebConstant.Success] = "Deleted successfully";
+
             return RedirectToAction("Index");
         }
 

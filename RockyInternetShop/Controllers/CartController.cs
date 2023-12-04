@@ -142,6 +142,7 @@ namespace RockyInternetShop.Controllers
                 _inqDtlRep.Add(det);
             }
             _inqDtlRep.SaveChanges();
+            TempData[WebConstant.Success] = "Inquiry successfully";
 
 
             return RedirectToAction(nameof(InquiryConfirmation));
