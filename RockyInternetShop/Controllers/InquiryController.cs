@@ -7,7 +7,7 @@ using RockyUtility;
 
 namespace RockyInternetShop.Controllers
 {
-    [Authorize(WebConstant.AdminRole)]
+    [Authorize(Roles = WebConstant.AdminRole)]
     public class InquiryController : Controller
     {
         private readonly IInquiryHeaderRepository _headerRepository;

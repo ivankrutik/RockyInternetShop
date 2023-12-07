@@ -1,4 +1,5 @@
 ﻿@using RockyModels.ViewModel;
+@using RockyUtility;
 @model ProductUserVM
 
 <form method="post">
@@ -58,6 +59,11 @@
                                         <span class="text-info">Summary:</span>
                                     </h4>
                                     <ul class="list-group mb-3">
+
+                                        @{
+                                            var orderTotal = 0.0;
+                                        }
+
                                         @for (int i = 0; i < Model.Products.Count(); i++)
                                         {
                                             <input asp-for="@Model.Products[i].Id" hidden />
@@ -65,8 +71,28 @@
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div>
                                                     <h6 class="my-0">@Model.Products[i].Name</h6>
-                                                    <small class="text-muted">@string.Format("{0:c0}",@Model.Products[i].Price)</small>
+
+                                                    @if (User.IsInRole(WebConstant.AdminRole))
+                                                    {
+                                                        <small class="text-muted">Quant: @Model.Products[i].QuantityTemp</small>
+                                                    }
+                                                    else
+                                                    {
+                                                        <small class="text-muted">@string.Format("{0:c0}",@Model.Products[i].Price)</small>
+                                                    }
                                                 </div>
+                                                @if (User.IsInRole(WebConstant.AdminRole))
+                                                {
+                                                    <span class="text-muted">@string.Format("{0:c0}",@Model.Products[i].Price*Model.Products[i].QuantityTemp)</span>
+                                                }
+                                            </li>
+                                            orderTotal += @Model.Products[i].Price * Model.Products[i].QuantityTemp;
+                                        }
+                                        @if (User.IsInRole(WebConstant.AdminRole))
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <small class="text-info">Total:</small>
+                                                <strong class="text-info">@string.Format("{0:c0}",@orderTotal)</strong>
                                             </li>
                                         }
                                     </ul>

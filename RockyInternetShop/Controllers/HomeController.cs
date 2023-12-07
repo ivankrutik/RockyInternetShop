@@ -56,7 +56,7 @@ namespace RockyInternetShop.Controllers
         }
 
         [HttpPost, ActionName("Details")]
-        public IActionResult DetailsPost(long id)
+        public IActionResult DetailsPost(long id, DetailsVM detailsVm)
         {
             List<ShoppingCart> shoppingCarts = new List<ShoppingCart>();
             if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WebConstant.SessionCart) != null
@@ -64,7 +64,7 @@ namespace RockyInternetShop.Controllers
             {
                 shoppingCarts = HttpContext.Session.Get<IEnumerable<ShoppingCart>>(WebConstant.SessionCart).ToList();
             }
-            shoppingCarts.Add(new ShoppingCart() { ProductId = id });
+            shoppingCarts.Add(new ShoppingCart() { ProductId = id, QuantityTemp = detailsVm.Product.QuantityTemp });
             HttpContext.Session.Set(WebConstant.SessionCart, shoppingCarts);
 
             TempData[WebConstant.Success] = "Added successfully";

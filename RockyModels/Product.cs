@@ -5,6 +5,11 @@ namespace RockyModels
 {
     public class Product
     {
+        public Product()
+        {
+            QuantityTemp = 1;
+        }
+
         [Key]
         public long Id { get; set; }
 
@@ -28,5 +33,9 @@ namespace RockyModels
         public long AppTypeId { get; set; }
         [ForeignKey(nameof(AppTypeId))]
         public virtual ApplicationType? AppType { get; set; }
+
+        [Range(0, 10000)]
+        [NotMapped]
+        public int QuantityTemp { get; set; }
     }
 }
