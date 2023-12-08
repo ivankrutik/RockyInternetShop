@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RockyModels;
 using RockyModels.InquiryDomain;
+using RockyModels.OrderDomain;
 
 namespace RockyDataAccess.Data
 {
@@ -24,5 +25,8 @@ namespace RockyDataAccess.Data
 
         public DbSet<InquiryDetail> InquiryDetail { get; set; }
         public DbSet<InquiryHeader> InquiryHeader { get; set; }
+
+        public DbSet<OrderDetail> OrderDetail { get; set; }
+        public DbSet<OrderHeader> OrderHeader { get; set; }
     }
 }

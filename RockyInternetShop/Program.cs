@@ -8,6 +8,7 @@ using RockyDataAccess.Reporitory.AppTypeDomain;
 using RockyDataAccess.Reporitory.ProductDomain;
 using RockyDataAccess.Reporitory.InquiryDomain;
 using RockyDataAccess.Reporitory.AppUserDomain;
+using RockyDataAccess.Reporitory.OrderDomain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,9 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IInquiryDetailRepository, InquiryDetailRepository>();
 builder.Services.AddScoped<IInquiryHeaderRepository, InquiryHeaderRepository>();
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
+
+builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+builder.Services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders().AddDefaultUI().AddEntityFrameworkStores<AppDbContext>();
