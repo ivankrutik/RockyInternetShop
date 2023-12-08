@@ -30,7 +30,7 @@
                                         <label>Name</label>
                                     </div>
                                     <div class="col-9">
-                                        <input type="text" asp-for="AppUser.FullName" class="form-control" />
+                                        <input type="text" asp-for="AppUser.FullName" required class="form-control" />
                                         <span asp-validation-for="AppUser.FullName" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -39,7 +39,7 @@
                                         <label>Phone</label>
                                     </div>
                                     <div class="col-9">
-                                        <input type="text" asp-for="AppUser.PhoneNumber" class="form-control" />
+                                        <input type="text" asp-for="AppUser.PhoneNumber" required class="form-control" />
                                         <span asp-validation-for="AppUser.PhoneNumber" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -48,10 +48,49 @@
                                         <label>Email</label>
                                     </div>
                                     <div class="col-9">
-                                        <input type="text" asp-for="AppUser.Email" class="form-control" />
+                                        <input type="text" asp-for="AppUser.Email" required class="form-control" />
                                         <span asp-validation-for="AppUser.Email" class="text-danger"></span>
                                     </div>
                                 </div>
+                                @if (User.IsInRole(WebConstant.AdminRole))
+                                {
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>StreetAddress</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input type="text" asp-for="AppUser.StreetAddress" class="form-control" />
+                                            <span asp-validation-for="AppUser.StreetAddress" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>City</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input type="text" asp-for="AppUser.City" class="form-control" />
+                                            <span asp-validation-for="AppUser.City" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>State</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input type="text" asp-for="AppUser.State" class="form-control" />
+                                            <span asp-validation-for="AppUser.State" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>PostalCode</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input type="text" asp-for="AppUser.PostalCode" class="form-control" />
+                                            <span asp-validation-for="AppUser.PostalCode" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                             <div class="col-12 col-lg-5 row">
                                 <div class="col-12">
@@ -104,7 +143,15 @@
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-12 col-md-5 offset-md-7">
-                            <button type="submit" class="btn btn-primary form-control">Submit Inquiry</button>
+                            @if (User.IsInRole(WebConstant.AdminRole))
+                            {
+                                <button id="submit-button" class="btn btn-success form-control">Submit Order</button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-primary form-control">Submit Inquiry</button>
+                            }
+
                         </div>
                     </div>
                 </div>
