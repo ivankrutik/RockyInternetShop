@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using RockyDataAccess.Reporitory.AppUserDomain;
 using RockyDataAccess.Reporitory.InquiryDomain;
+using RockyDataAccess.Reporitory.OrderDomain;
 using RockyDataAccess.Reporitory.ProductDomain;
 using RockyModels;
 using RockyModels.InquiryDomain;
+using RockyModels.OrderDomain;
 using RockyModels.ViewModel;
 using RockyUtility;
 using System.Security.Claims;
@@ -23,6 +25,8 @@ namespace RockyInternetShop.Controllers
         private readonly IAppUserRepository _userRep;
         private readonly IInquiryHeaderRepository _inqHdrRep;
         private readonly IInquiryDetailRepository _inqDtlRep;
+        private readonly IOrderHeaderRepository _ordHdrRep;
+        private readonly IOrderDetailRepository _ordDtlRep;
 
         [BindProperty]
         public ProductUserVM ProdUserVm { get; set; }
@@ -32,7 +36,10 @@ namespace RockyInternetShop.Controllers
                                 IProductRepository prodRep,
                                  IAppUserRepository userRep,
                                  IInquiryHeaderRepository inqHdrRep,
-                                 IInquiryDetailRepository inqDtlRep)
+                                 IInquiryDetailRepository inqDtlRep,
+                                 IOrderHeaderRepository ordHdrRep,
+                                 IOrderDetailRepository ordDtlRep
+            )
         {
             _webHostEnv = webHostEnv;
             _emailSender = emailSender;
@@ -40,6 +47,8 @@ namespace RockyInternetShop.Controllers
             _userRep = userRep;
             _inqHdrRep = inqHdrRep;
             _inqDtlRep = inqDtlRep;
+            _ordHdrRep = ordHdrRep;
+            _ordDtlRep = ordDtlRep;
         }
 
         public IActionResult Index()
@@ -140,6 +149,62 @@ namespace RockyInternetShop.Controllers
             var claimIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
+            if (User.IsInRole(WebConstant.AdminRole))
+            {
+                //order
+                return Order(ProdUserVm, claim);
+            }
+            else
+            {
+                //inquiry
+                return await Inquiry(ProdUserVm, claim);
+            }
+
+
+        }
+
+        private IActionResult Order(ProductUserVM ProdUserVm, Claim? claim)
+        {
+            var orderTotal = 0.0;
+            orderTotal = ProdUserVm.Products.Sum(x => x.QuantityTemp * x.Price);
+
+            var orderHeader = new OrderHeader()
+            {
+                CreatedByUserId = claim.Value,
+                FinalOrderTotal = orderTotal,
+                City = ProdUserVm.AppUser.City,
+                State = ProdUserVm.AppUser.State,
+                Email = ProdUserVm.AppUser.Email,
+                PhoneNumber = ProdUserVm.AppUser.PhoneNumber,
+                PostalCode = ProdUserVm.AppUser.PostalCode,
+                StreetAddress = ProdUserVm.AppUser.StreetAddress,
+                FullName = ProdUserVm.AppUser.FullName,
+                OrderDate = DateTime.Now,
+                OrderStatus = WebConstant.StatusPending
+            };
+
+            _ordHdrRep.Add(orderHeader);
+            _ordHdrRep.SaveChanges();
+
+            foreach (var prod in ProdUserVm.Products)
+            {
+                var det = new OrderDetail
+                {
+                    OrderHeaderId = orderHeader.Id,
+                    ProductId = prod.Id,
+                    PricePerQuant = prod.Price,
+                    Quant = prod.QuantityTemp
+                };
+
+                _ordDtlRep.Add(det);
+            }
+            _ordDtlRep.SaveChanges();
+
+            return RedirectToAction(nameof(InquiryConfirmation), new { id = orderHeader.Id });
+        }
+
+        private async Task<IActionResult> Inquiry(ProductUserVM ProdUserVm, Claim? claim)
+        {
             var PathToTemplate = _webHostEnv.WebRootPath + Path.DirectorySeparatorChar.ToString() + "templates" + Path.DirectorySeparatorChar.ToString() + "Inquiry.html";
             var Subject = "New Inquiry";
             string HtmlBody = string.Empty;
@@ -192,10 +257,12 @@ namespace RockyInternetShop.Controllers
             return RedirectToAction(nameof(InquiryConfirmation));
         }
 
-        public IActionResult InquiryConfirmation()
+        public IActionResult InquiryConfirmation(int id = 0)
         {
+            OrderHeader ord = _ordHdrRep.FirstOrDefault(x => x.Id == id);
+
             HttpContext.Session.Clear();
-            return View();
+            return View(ord);
         }
 
 
