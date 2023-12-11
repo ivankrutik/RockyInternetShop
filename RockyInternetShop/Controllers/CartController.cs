@@ -11,6 +11,7 @@ using RockyModels.InquiryDomain;
 using RockyModels.OrderDomain;
 using RockyModels.ViewModel;
 using RockyUtility;
+using RockyUtility.BrainTreeDomain;
 using System.Security.Claims;
 using System.Text;
 
@@ -27,6 +28,7 @@ namespace RockyInternetShop.Controllers
         private readonly IInquiryDetailRepository _inqDtlRep;
         private readonly IOrderHeaderRepository _ordHdrRep;
         private readonly IOrderDetailRepository _ordDtlRep;
+        private readonly IBrainTreeGate _gate;
 
         [BindProperty]
         public ProductUserVM ProdUserVm { get; set; }
@@ -38,8 +40,8 @@ namespace RockyInternetShop.Controllers
                                  IInquiryHeaderRepository inqHdrRep,
                                  IInquiryDetailRepository inqDtlRep,
                                  IOrderHeaderRepository ordHdrRep,
-                                 IOrderDetailRepository ordDtlRep
-            )
+                                 IOrderDetailRepository ordDtlRep,
+                                 IBrainTreeGate gate)
         {
             _webHostEnv = webHostEnv;
             _emailSender = emailSender;
@@ -49,6 +51,7 @@ namespace RockyInternetShop.Controllers
             _inqDtlRep = inqDtlRep;
             _ordHdrRep = ordHdrRep;
             _ordDtlRep = ordDtlRep;
+            _gate = gate;
         }
 
         public IActionResult Index()
@@ -109,6 +112,11 @@ namespace RockyInternetShop.Controllers
                 {
                     appUser = new AppUser();
                 }
+
+                var gate = _gate.GetGateWay();
+                var token = gate.ClientToken.Generate();
+                ViewBag.ClientToken = token;
+
             }
             else
             {
