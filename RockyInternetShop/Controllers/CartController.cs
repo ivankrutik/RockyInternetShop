@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Braintree;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
@@ -152,7 +153,7 @@ namespace RockyInternetShop.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Summary")]
-        public async Task<IActionResult> SummaryPostAsync(ProductUserVM ProdUserVm)
+        public async Task<IActionResult> SummaryPostAsync(IFormCollection collection, ProductUserVM ProdUserVm)
         {
             var claimIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -160,18 +161,16 @@ namespace RockyInternetShop.Controllers
             if (User.IsInRole(WebConstant.AdminRole))
             {
                 //order
-                return Order(ProdUserVm, claim);
+                return Order(ProdUserVm, claim, collection);
             }
             else
             {
                 //inquiry
                 return await Inquiry(ProdUserVm, claim);
             }
-
-
         }
 
-        private IActionResult Order(ProductUserVM ProdUserVm, Claim? claim)
+        private IActionResult Order(ProductUserVM ProdUserVm, Claim? claim, IFormCollection collection)
         {
             var orderTotal = 0.0;
             orderTotal = ProdUserVm.Products.Sum(x => x.QuantityTemp * x.Price);
@@ -207,6 +206,30 @@ namespace RockyInternetShop.Controllers
                 _ordDtlRep.Add(det);
             }
             _ordDtlRep.SaveChanges();
+
+            string nonceFromTheClient = collection["payment_method_nonce"];
+            var request = new TransactionRequest
+            {
+                Amount = (decimal)orderTotal,
+                PaymentMethodNonce = nonceFromTheClient,
+                OrderId = orderHeader.Id.ToString(),
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+            var gateWay = _gate.GetGateWay();
+            var result = gateWay.Transaction.Sale(request);
+            if (result.Target.ProcessorResponseText == "Approved")
+            {
+                orderHeader.TransactionId = result.Target.Id;
+                orderHeader.State = WebConstant.StatusApproved;
+            }
+            else
+            {
+                orderHeader.State = WebConstant.StatusCancelled;
+            }
+            _ordHdrRep.SaveChanges();
 
             return RedirectToAction(nameof(InquiryConfirmation), new { id = orderHeader.Id });
         }
@@ -273,7 +296,6 @@ namespace RockyInternetShop.Controllers
             return View(ord);
         }
 
-
         public IActionResult Remove(long id)
         {
             var shpCarts = new List<ShoppingCart>();
@@ -293,7 +315,6 @@ namespace RockyInternetShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         public IActionResult UpdateCart(IEnumerable<Product> products)
         {
             List<ShoppingCart> shoppingCarts = new List<ShoppingCart>();
@@ -304,6 +325,12 @@ namespace RockyInternetShop.Controllers
             HttpContext.Session.Set<List<ShoppingCart>>(WebConstant.SessionCart, shoppingCarts);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Clear()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
