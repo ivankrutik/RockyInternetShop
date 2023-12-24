@@ -1,4 +1,6 @@
-﻿namespace RockyUtility
+﻿using System.Collections.ObjectModel;
+
+namespace RockyUtility
 {
     public static class WebConstant
     {
@@ -24,5 +26,11 @@
         public const string StatusShiped = "Shiped";
         public const string StatusCancelled = "Cancelled";
         public const string StatusRefunded = "Refunded";
+
+        public static readonly IEnumerable<string> AllStatuses =
+            new ReadOnlyCollection<string>(new List<string>()
+            {
+                StatusApproved, StatusCancelled, StatusInProcess, StatusPending, StatusRefunded, StatusShiped
+            });
     }
 }

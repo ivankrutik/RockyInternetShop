@@ -1,0 +1,24 @@
+﻿@using RockyModels.ViewModel;
+@model OrderListVM;
+
+<div>
+    <ejs-grid id="Grid" dataSource="@Model.Orders" allowFiltering="true" allowSorting="true" allowPaging="true">
+        <e-grid-filtersettings type="Menu"></e-grid-filtersettings>
+        <e-grid-loadingIndicator indicatorType="Shimmer"></e-grid-loadingIndicator>
+        <e-grid-pagesettings pageSize="5"></e-grid-pagesettings>
+        <e-grid-columns>
+            <e-grid-column field="Id" headerText="ID" isPrimaryKey="true" textAlign="Right" width="60"></e-grid-column>
+            @*             <e-grid-column field="Employees" headerText="Employee Name" clipMode="EllipsisWithTooltip" template="#empTemplate" width="200"></e-grid-column>
+            <e-grid-column field="Designation" headerText="Designation" clipMode="EllipsisWithTooltip" width="170"></e-grid-column>
+            <e-grid-column field="Mail" headerText="Mail" width="230"></e-grid-column>
+            <e-grid-column field="Location" headerText="Location" template="#coltemplate" width="140"></e-grid-column>
+            <e-grid-column field="Status" headerText="Status" template="#statusTemplate" width="150"></e-grid-column>
+            <e-grid-column field="Trustworthiness" headerText="Trustworthiness" template="#trustTemplate" width="200"></e-grid-column>
+            <e-grid-column field="Rating" headerText="Rating" template="#ratingTemplate" width="160"></e-grid-column>
+            <e-grid-column field="Software" headerText="Software" allowSorting="false" allowFiltering="false" template="#progessTemplate" width="180"></e-grid-column>
+            <e-grid-column field="CurrentSalary" headerText="Current Salary" format="C2" textAlign="Right" width="160"></e-grid-column>
+            <e-grid-column field="Address" headerText="Address" width="240"></e-grid-column>
+            *@
+        </e-grid-columns>
+    </ejs-grid>
+</div>
