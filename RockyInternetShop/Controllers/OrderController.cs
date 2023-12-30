@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RockyDataAccess.Reporitory.OrderDomain;
 using RockyModels.ViewModel;
 using RockyUtility;
@@ -6,6 +7,7 @@ using RockyUtility.BrainTreeDomain;
 
 namespace RockyInternetShop.Controllers
 {
+    [Authorize(Roles = WebConstant.AdminRole)]
     public class OrderController : Controller
     {
         private readonly IOrderHeaderRepository _ordHdrRep;
