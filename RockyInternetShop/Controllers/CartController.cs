@@ -223,11 +223,11 @@ namespace RockyInternetShop.Controllers
             if (result.Target.ProcessorResponseText == "Approved")
             {
                 orderHeader.TransactionId = result.Target.Id;
-                orderHeader.State = WebConstant.StatusApproved;
+                orderHeader.OrderStatus = WebConstant.StatusApproved;
             }
             else
             {
-                orderHeader.State = WebConstant.StatusCancelled;
+                orderHeader.OrderStatus = WebConstant.StatusCancelled;
             }
             _ordHdrRep.SaveChanges();
 

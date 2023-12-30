@@ -31,7 +31,6 @@
                                     </div>
                                     <div class="col-9">
                                         <input type="text" asp-for="AppUser.FullName" required class="form-control" />
-                                        <span asp-validation-for="AppUser.FullName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="row my-1">
@@ -40,7 +39,6 @@
                                     </div>
                                     <div class="col-9">
                                         <input type="text" asp-for="AppUser.PhoneNumber" required class="form-control" />
-                                        <span asp-validation-for="AppUser.PhoneNumber" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="row my-1">
@@ -49,7 +47,6 @@
                                     </div>
                                     <div class="col-9">
                                         <input type="text" asp-for="AppUser.Email" required class="form-control" />
-                                        <span asp-validation-for="AppUser.Email" class="text-danger"></span>
                                     </div>
                                 </div>
                                 @if (User.IsInRole(WebConstant.AdminRole))
@@ -60,7 +57,6 @@
                                         </div>
                                         <div class="col-9">
                                             <input type="text" asp-for="AppUser.StreetAddress" class="form-control" />
-                                            <span asp-validation-for="AppUser.StreetAddress" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="row my-1">
@@ -69,7 +65,6 @@
                                         </div>
                                         <div class="col-9">
                                             <input type="text" asp-for="AppUser.City" class="form-control" />
-                                            <span asp-validation-for="AppUser.City" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="row my-1">
@@ -78,7 +73,6 @@
                                         </div>
                                         <div class="col-9">
                                             <input type="text" asp-for="AppUser.State" class="form-control" />
-                                            <span asp-validation-for="AppUser.State" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="row my-1">
@@ -87,7 +81,6 @@
                                         </div>
                                         <div class="col-9">
                                             <input type="text" asp-for="AppUser.PostalCode" class="form-control" />
-                                            <span asp-validation-for="AppUser.PostalCode" class="text-danger"></span>
                                         </div>
                                     </div>
                                 }
@@ -156,11 +149,11 @@
                         <div class="col-12 col-md-5 offset-md-7">
                             @if (User.IsInRole(WebConstant.AdminRole))
                             {
-                                <button id="submit-button" class="btn btn-success form-control">Submit Order</button>
+                                <button id="submit-button" onclick="return validateInput()" class="btn btn-success form-control">Submit Order</button>
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-primary form-control">Submit Inquiry</button>
+                                <button type="submit" onclick="return validateInput()" class="btn btn-primary form-control">Submit Inquiry</button>
                             }
 
                         </div>
@@ -198,9 +191,9 @@
 
 
         function validateInput() {
-            var app_name = document.getElementById("ApplicationUser_FullName").value;
-            var app_phone = document.getElementById("ApplicationUser_PhoneNumber").value;
-            var app_email = document.getElementById("ApplicationUser_Email").value;
+            var app_name = document.getElementById("AppUser_FullName").value;
+            var app_phone = document.getElementById("AppUser_PhoneNumber").value;
+            var app_email = document.getElementById("AppUser_Email").value;
 
             if (app_name.toString() == '') {
                 Swal.fire({

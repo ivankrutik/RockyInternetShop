@@ -1,0 +1,202 @@
+﻿@using RockyModels.ViewModel;
+@model OrderVM;
+
+<form method="post">
+    <input asp-for="Header.Id" hidden />
+    <br />
+    <div class="backgroundWhite container">
+        <div class="card">
+            <div class="card-header bg-dark text-light ml-0 row container">
+                <div class="col-12 d-none d-md-block col-md-6 pb-1">
+                    <i class="fas fa-shopping-cart"></i> &nbsp; Order Summary
+                </div>
+                <div class="col-12 col-md-4 offset-md-2 text-right">
+                    <a asp-controller="Order" asp-action="Index" class="btn btn-outline-info form-control btn-sm">Back to Orders</a>
+                </div>
+            </div>
+            <div class="card-body pb-0">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 pb-4">
+                            <div class="row">
+                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="text-info">Order Details:</span>
+                                </h4>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Name</div>
+                                <div class="col-9">
+
+                                    <input asp-for="Header.FullName" type="text" class="form-control" />
+                                    <span asp-validation-for="Header.FullName" class="text-danger"></span>
+
+
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Phone</div>
+                                <div class="col-9">
+
+                                    <input asp-for="Header.PhoneNumber" type="text" class="form-control" />
+                                    <span asp-validation-for="Header.PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Address</div>
+                                <div class="col-9">
+
+                                    <input asp-for="Header.StreetAddress" type="text" class="form-control" />
+                                    <span asp-validation-for="Header.StreetAddress" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">City</div>
+                                <div class="col-9">
+
+                                    <input asp-for="Header.City" type="text" class="form-control" />
+                                    <span asp-validation-for="Header.City" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">State</div>
+                                <div class="col-9">
+
+                                    <input asp-for="Header.State" type="text" class="form-control" />
+                                    <span asp-validation-for="Header.State" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Zip Code</div>
+                                <div class="col-9">
+
+                                    <input asp-for="Header.PostalCode" type="text" class="form-control" />
+                                    <span asp-validation-for="Header.PostalCode" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Email</div>
+                                <div class="col-9">
+
+                                    <input asp-for="Header.Email" type="text" class="form-control" />
+                                    <span asp-validation-for="Header.Email" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Order Date</div>
+                                <div class="col-9">
+
+                                    <input value="@Model.Header.OrderDate.ToShortDateString()" type="text" class="form-control" readonly />
+
+                                </div>
+                            </div>
+
+                            <div class="row my-1">
+                                <div class="col-3">Shipping Date</div>
+                                <div class="col-9">
+                                    <input value="@Model.Header.ShippingDate.ToShortDateString()" id="shippingDate" type="text" readonly class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="row my-1">
+                                <div class="col-3">Transaction ID</div>
+                                <div class="col-9">
+                                    <input asp-for="Header.TransactionId" type="text" readonly class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Order Status</div>
+                                <div class="col-9">
+                                    <input asp-for="Header.OrderStatus" type="text" readonly class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-9 offset-3">
+                                    <input type="submit" value="Update Order Details" class="btn btn-warning form-control"
+                                           asp-action="UpdateOrderDetails" formmethod="post" />
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-12 col-lg-5 offset-lg-1">
+                            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-info">Order Summary</span>
+                            </h4>
+                            <ul class="list-group mb-3">
+                                @foreach (var detail in Model.Details)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between p-2">
+                                        <div class="row container">
+                                            <div class="col-8">
+                                                <h6 class="my-0 text-info">@detail.Product.Name</h6>
+                                                <small class="text-muted">Price : @detail.PricePerQuant</small><br />
+                                                <small class="text-muted">Quantity : @detail.Quant</small>
+                                            </div>
+                                            <div class="col-4">
+                                                <p class="text-success">$@(detail.PricePerQuant * detail.Quant)</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                                <li class="list-group-item bg-info">
+                                    <div class="row container">
+                                        <div class="col-6">
+                                            <h5 class="text-white">TOTAL </h5>
+                                        </div>
+                                        <div class="col-6 text-right">
+                                            <h5 class="text-white">$@(Model.Header.FinalOrderTotal)</h5>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+
+
+                            <br />
+
+                            @if (Model.Header.OrderStatus == RockyUtility.WebConstant.StatusApproved)
+                            {
+                                <input type="submit" value="Start Processing"
+                                       formmethod="post" asp-action="StartProcessing"
+                                       class="btn btn-info form-control" />
+                            }
+                            @if (Model.Header.OrderStatus == RockyUtility.WebConstant.StatusInProcess)
+                            {
+                                <input type="submit" value="Ship Order"
+                                       formmethod="post" asp-action="ShipOrder"
+                                       class="btn btn-primary form-control" />
+                            }
+                            @if (Model.Header.OrderStatus != RockyUtility.WebConstant.StatusRefunded
+                            && Model.Header.OrderStatus != RockyUtility.WebConstant.StatusCancelled)
+                            {
+                                <div class="pt-2">
+                                    <button type="submit"
+                                            class="btn btn-danger form-control"
+                                            asp-action="CancelOrder"
+                                            formmethod="post">
+                                        Cancel Order
+                                    </button>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            var shippingDate = document.getElementById("shippingDate");
+            if (shippingDate.value == '1/1/0001') {
+                shippingDate.value = "";
+            }
+        })
+    </script>
+}

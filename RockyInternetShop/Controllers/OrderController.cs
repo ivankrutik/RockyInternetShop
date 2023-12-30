@@ -12,6 +12,9 @@ namespace RockyInternetShop.Controllers
         private readonly IOrderDetailRepository _ordDtlRep;
         private readonly IBrainTreeGate _gate;
 
+        [BindProperty]
+        public OrderVM OrderVM { get; set; }
+
         public OrderController(IOrderHeaderRepository ordHdrRep,
                                  IOrderDetailRepository ordDtlRep,
                                  IBrainTreeGate gate)
@@ -21,16 +24,68 @@ namespace RockyInternetShop.Controllers
             _gate = gate;
         }
 
-        public IActionResult Index()
+        public IActionResult Details(long id)
+        {
+            OrderVM = new OrderVM()
+            {
+                Header = _ordHdrRep.Find(id),
+                Details = _ordDtlRep.GetAll(x => x.OrderHeaderId == id, includedProperties: "Product")
+            };
+            return View(OrderVM);
+        }
+
+        public IActionResult Index(string? searchName = null, string? searchEmail = null, string? searchPhone = null, string? SelectedStatus = null)
         {
             OrderListVM vm = new OrderListVM()
             {
-                Orders = _ordHdrRep.GetAll(),
-                Statuses = WebConstant.AllStatuses.ToList().Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem() { Text = x, Value = x }),
-                SelectedStatus = WebConstant.StatusApproved
+                Orders = _ordHdrRep.GetAll(x => x.FullName.ToLower().Contains(searchName != null ? searchName.ToLower() : "")
+                        && x.Email.ToLower().Contains(searchEmail != null ? searchEmail.ToLower() : "")
+                        && x.PhoneNumber.ToLower().Contains(searchPhone != null ? searchPhone.ToLower() : "")
+                        && (SelectedStatus == null || x.State == SelectedStatus)),
+                Statuses = WebConstant.AllStatuses.ToList().Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem() { Text = x, Value = x })
             };
 
             return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult StartProcessing()
+        {
+            var header = _ordHdrRep.FirstOrDefault(x => x.Id == OrderVM.Header.Id);
+            header.OrderStatus = WebConstant.StatusInProcess;
+            _ordHdrRep.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        public IActionResult ShipOrder()
+        {
+            var header = _ordHdrRep.FirstOrDefault(x => x.Id == OrderVM.Header.Id);
+            header.OrderStatus = WebConstant.StatusShiped;
+            header.ShippingDate = DateTime.Now;
+            _ordHdrRep.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        public IActionResult CancelOrder()
+        {
+            var header = _ordHdrRep.FirstOrDefault(x => x.Id == OrderVM.Header.Id);
+
+            var gate = _gate.GetGateWay();
+            var transaction = gate.Transaction.Find(header.TransactionId);
+            if (transaction.Status == Braintree.TransactionStatus.AUTHORIZED || transaction.Status == Braintree.TransactionStatus.SUBMITTED_FOR_SETTLEMENT)
+            {
+                // no refund
+                var resultVoid = gate.Transaction.Void(header.TransactionId);
+            }
+            else
+            {
+                //refund
+                var resultRefund = gate.Transaction.Refund(header.TransactionId);
+            }
+
+            header.OrderStatus = WebConstant.StatusRefunded;
+            _ordHdrRep.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
