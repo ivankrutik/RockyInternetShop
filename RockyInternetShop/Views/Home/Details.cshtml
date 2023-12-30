@@ -39,11 +39,11 @@
                                         <div class="col-12">
                                             @if (Model.IsExistInCart)
                                             {
-                                                <input asp-for="@Model.Product.QuantityTemp" class="form-control" disabled></input>
+                                                <input asp-for="@Model.Product.QuantityTemp" class="form-control" disabled/>
                                             }
                                             else
                                             {
-                                                <input asp-for="@Model.Product.QuantityTemp" class="form-control"></input>
+                                                <input asp-for="@Model.Product.QuantityTemp" class="form-control"/>
                                                 <span asp-validation-for="@Model.Product.QuantityTemp" class="text-danger"></span>
                                             }
                                         </div>
@@ -75,3 +75,7 @@
         </div>
     </form>
 </div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -54,8 +54,12 @@ namespace RockyInternetShop.Controllers
             var header = _ordHdrRep.FirstOrDefault(x => x.Id == OrderVM.Header.Id);
             header.OrderStatus = WebConstant.StatusInProcess;
             _ordHdrRep.SaveChanges();
+
+            TempData[WebConstant.Success] = "Order start success";
+
             return RedirectToAction(nameof(Index));
         }
+
         [HttpPost]
         public IActionResult ShipOrder()
         {
@@ -63,8 +67,12 @@ namespace RockyInternetShop.Controllers
             header.OrderStatus = WebConstant.StatusShiped;
             header.ShippingDate = DateTime.Now;
             _ordHdrRep.SaveChanges();
+
+            TempData[WebConstant.Success] = "Order shipping success";
+
             return RedirectToAction(nameof(Index));
         }
+
         [HttpPost]
         public IActionResult CancelOrder()
         {
@@ -85,7 +93,30 @@ namespace RockyInternetShop.Controllers
 
             header.OrderStatus = WebConstant.StatusRefunded;
             _ordHdrRep.SaveChanges();
+
+            TempData[WebConstant.Success] = "Order canceled success";
+
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult UpdateOrderDetails()
+        {
+            var header = _ordHdrRep.FirstOrDefault(x => x.Id == OrderVM.Header.Id);
+
+            header.FullName = OrderVM.Header.FullName;
+            header.PhoneNumber = OrderVM.Header.PhoneNumber;
+            header.StreetAddress = OrderVM.Header.StreetAddress;
+            header.City = OrderVM.Header.City;
+            header.State = OrderVM.Header.State;
+            header.PostalCode = OrderVM.Header.PostalCode;
+            header.Email = OrderVM.Header.Email;
+
+            _ordHdrRep.SaveChanges();
+
+            TempData[WebConstant.Success] = "Order details updated success";
+
+            return RedirectToAction("Details", "Order", new { id = header.Id });
         }
     }
 }

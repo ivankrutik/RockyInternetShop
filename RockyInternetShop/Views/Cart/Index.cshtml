@@ -93,6 +93,7 @@
                                     {
                                         <div class="col-4 col-lg-2 pt-lg-4" style="font-size:11px;">
                                             <input type="text" class="form-control" asp-for="@Model[i].QuantityTemp"></input>
+                                            <span asp-validation-for="@Model[i].QuantityTemp" class="text-danger"></span>
                                         </div>
                                         <div class="col-3 col-lg-2 pt-lg-4" style="font-size:11px;">
                                             <span style="font-size:17px;"> @string.Format("{0:c0}",@Model[i].Price*Model[i].QuantityTemp)</span>
@@ -145,4 +146,8 @@
 else
 {
     <h3>Please add product to cart</h3>
+}
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
 }

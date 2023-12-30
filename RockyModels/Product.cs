@@ -34,7 +34,7 @@ namespace RockyModels
         [ForeignKey(nameof(AppTypeId))]
         public virtual ApplicationType? AppType { get; set; }
 
-        [Range(0, 10000)]
+        [Range(1, 10000, ErrorMessage = "Quant must be more than 0")]
         [NotMapped]
         public int QuantityTemp { get; set; }
     }
