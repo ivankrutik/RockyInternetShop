@@ -10,6 +10,7 @@ using RockyDataAccess.Reporitory.InquiryDomain;
 using RockyDataAccess.Reporitory.AppUserDomain;
 using RockyDataAccess.Reporitory.OrderDomain;
 using RockyUtility.BrainTreeDomain;
+using RockyDataAccess.Initializer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,8 @@ builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
 builder.Services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
+
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 
 builder.Services.Configure<BrainTreeSettings>(builder.Configuration.GetSection("BrainTree"));
 builder.Services.AddSingleton<IBrainTreeGate, BrainTreeGate>();
@@ -59,6 +62,13 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+    var myDependency = services.GetRequiredService<IDbInitializer>();
+    myDependency.Initialize();
+}
 
 app.UseSession();
 
